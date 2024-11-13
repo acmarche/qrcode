@@ -104,7 +104,7 @@ class QrCodeType extends AbstractType
                 'logo',
                 FileType::class,
                 [
-                    'label' => 'Logo',
+                    'label' => 'Votre logo',
                     'help' => 'Ajoute un logo au milieu du QrCode',
                     'required' => false,
                 ],
@@ -116,6 +116,14 @@ class QrCodeType extends AbstractType
                     'required' => false,
                     'label' => 'Taille du logo',
                     'help' => 'Taille en pixel (200 par défaut)',
+                ],
+            )
+            ->add(
+                'addDefaultLogo',
+                CheckboxType::class,
+                [
+                    'label' => 'Ajouter le logo de la Ville',
+                    'required' => false,
                 ],
             )
             ->add(

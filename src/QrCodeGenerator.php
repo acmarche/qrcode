@@ -85,7 +85,7 @@ class QrCodeGenerator
         if ($qrCodeEntity->logo instanceof UploadedFile) {
             $logo = $qrCodeEntity->logo;
             $filePath = $this->projectDir.DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.$this->qrCodeDir.DIRECTORY_SEPARATOR;
-            $fileName = uniqid().'.png';
+            $fileName = uniqid().'.'.$logo->guessExtension() ?? '.png';
             $logo->move($filePath, $fileName);
             $qrCodeEntity->logoPath = $filePath.DIRECTORY_SEPARATOR.$fileName;
 
@@ -128,7 +128,7 @@ class QrCodeGenerator
         }
 
         if ($qrCodeEntity->dataFile instanceof UploadedFile) {
-            return$qrCodeEntity->dataFile->getContent();
+            return $qrCodeEntity->dataFile->getContent();
         }
 
         return '';
