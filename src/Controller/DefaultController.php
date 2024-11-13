@@ -62,6 +62,10 @@ class DefaultController extends AbstractController
                 $this->qrCodeGenerator->saveToFile($result, $qrCode);
 
                 if ($data->persistInDatabase) {
+                    $user = $this->getUser();
+                    if ($user) {
+                        $qrCode->username = $user->getUserIdentifier();
+                    }
                     if (!$qrCode->id) {
                         $this->qrCodeRepository->persist($qrCode);
                     }
