@@ -1,0 +1,31 @@
+{% extends '@AcMarcheQrCode/layout.html.twig' %}
+
+{% block body %}
+    <div class="card">
+        <h3 class="card-header">Générer un QrCode</h3>
+        <div class="card-body">
+
+            {% if codes|length > 0 %}
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Id</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    {% for qrcode in codes %}
+                        <tr>
+                            <td>{{ qrcode.id }}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <p>Aucun qrcode généré</p>
+            {% endif %}
+
+        </div>
+    </div>
+{% endblock %}

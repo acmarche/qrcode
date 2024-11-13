@@ -1,0 +1,120 @@
+{% extends '@AcMarcheQrCode/layout.html.twig' %}
+
+{% block body %}
+    <div class="card">
+        <h3 class="card-header">Générer un QrCode</h3>
+        <div class="card-body">
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            <div class="accordion" id="accordionQrCode">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseData" aria-expanded="true" aria-controls="collapseData">
+                            Donnée
+                        </button>
+                    </h2>
+                    <div id="collapseData" class="accordion-collapse collapse show" data-bs-parent="#accordionQrCode">
+                        <div class="accordion-body">
+                            <div class="row align-items-center justify-content-center">
+                                <div class="col-md-6">
+                                    {{ form_row(form.url) }}
+                                </div>
+                                <span class="col-md-2"
+                                      style="font-weight: bold;">OU</span>
+                                <div class="col-md-4">
+                                    {{ form_row(form.dataFile) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseColor" aria-expanded="true" aria-controls="collapseColor">
+                            Couleur et taille
+                        </button>
+                    </h2>
+                    <div id="collapseColor" class="accordion-collapse collapse" data-bs-parent="#accordionQrCode">
+                        <div class="accordion-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    {{ form_row(form.color) }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form_row(form.colorBackground) }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form_row(form.size) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseLabel" aria-expanded="true" aria-controls="collapseLabel">
+                            Label
+                        </button>
+                    </h2>
+                    <div id="collapseLabel" class="accordion-collapse collapse" data-bs-parent="#accordionQrCode">
+                        <div class="accordion-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    {{ form_row(form.labelText) }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form_row(form.labelColor) }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form_row(form.labelSize) }}
+                                </div>
+                                <div class="col-md-3">
+                                    {{ form_row(form.labelAlignment) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseLogo" aria-expanded="true" aria-controls="collapseLogo">
+                            Logo
+                        </button>
+                    </h2>
+                    <div id="collapseLogo" class="accordion-collapse collapse" data-bs-parent="#accordionQrCode">
+                        <div class="accordion-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    {{ form_row(form.logo) }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form_row(form.logoSize) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    {{ form_row(form.persistInDatabase) }}
+                </div>
+                <div class="col-md-4">
+                    {{ form_row(form.name) }}
+                </div>
+            </div>
+            <button class="btn btn-primary mt-2 mb-2" type="submit"><i class="far fa-save" aria-hidden="true"></i>
+                Générer
+            </button>
+            {{ form_end(form) }}
+
+            {% include '@AcMarcheQrCode/default/_qrcode.html.twig' %}
+
+        </div>
+    </div>
+{% endblock %}
