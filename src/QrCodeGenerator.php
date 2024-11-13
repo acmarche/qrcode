@@ -69,8 +69,9 @@ class QrCodeGenerator
         return $writer->write($qrCode);
     }
 
-    public function saveToFile(ResultInterface $result, QrCodeEntity $qrCode, string $name = 'toto.png'): void
+    public function saveToFile(ResultInterface $result, QrCodeEntity $qrCode): void
     {
+        $name = $qrCode->uuid.'.png';
         $filePath = $this->qrCodeDir.DIRECTORY_SEPARATOR.$name;
         $result->saveToFile($filePath);
         $qrCode->filePath = DIRECTORY_SEPARATOR.$filePath;
