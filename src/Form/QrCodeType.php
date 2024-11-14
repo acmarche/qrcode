@@ -131,8 +131,8 @@ class QrCodeType extends AbstractType
                 CheckboxType::class,
                 [
                     'required' => false,
-                    'label' => 'Archiver',
-                    'help' => 'Archiver pour le consulter plus tard',
+                    'label' => 'Sauvegarder',
+                    'help' => 'Sauvegarder en base de données pour consulter plus tard',
                 ],
             )
             ->add(

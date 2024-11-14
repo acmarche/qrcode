@@ -9,21 +9,28 @@
                 <table class="table table-bordered">
                     <tr>
                         <th>Id</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
+                        <th>Nom</th>
+                        <th>Url</th>
+                        <th>Crée le</th>
                     </tr>
                     {% for qrcode in codes %}
                         <tr>
-                            <td>{{ qrcode.id }}</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td>
+                                <a href="{{ path('qrcode_show', {'uuid':qrcode.uuid}) }}">
+                                    Num {{ qrcode.id }}
+                                </a>
+                            </td>
+                            <td>{{ qrcode.name }}</td>
+                            <td>{{ qrcode.url }}</td>
+                            <td>{{ qrcode.createdAt|format_date('full') }}</td>
                         </tr>
                     {% endfor %}
                 </table>
             {% else %}
                 <p>Aucun qrcode généré</p>
+                <a href="{{ path('qrcode_new') }}" class="btn btn-primary">
+                    Générer un QRCode
+                </a>
             {% endif %}
 
         </div>

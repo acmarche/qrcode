@@ -6,7 +6,6 @@ use AcMarche\QrCode\Entity\QrCode;
 use AcMarche\QrCode\Form\QrCodeType;
 use AcMarche\QrCode\QrCodeGenerator;
 use AcMarche\QrCode\Repository\QrCodeRepository;
-use Endroid\QrCode\Writer\PngWriter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,9 +21,8 @@ class DefaultController extends AbstractController
         private readonly QrCodeGenerator $qrCodeGenerator,
     ) {}
 
-
     #[Route(path: '/', name: 'qrcode_home')]
-    public function index(Request $request, ?string $uuid = null): Response
+    public function index(): Response
     {
         $user = $this->getUser();
         $codes = $this->qrCodeRepository->findByUser($user->getUserIdentifier());
@@ -82,6 +80,18 @@ class DefaultController extends AbstractController
             '@AcMarcheQrCode/default/new.html.twig',
             [
                 'form' => $form,
+                'filePath' => $qrCode->filePath,
+            ],
+        );
+    }
+
+    #[Route(path: '/show/{uuid}', name: 'qrcode_show')]
+    public function show(QrCode $qrCode): Response
+    {
+        return $this->render(
+            '@AcMarcheQrCode/default/show.html.twig',
+            [
+                'qrcode' => $qrCode,
                 'filePath' => $qrCode->filePath,
             ],
         );

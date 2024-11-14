@@ -5,13 +5,15 @@ namespace AcMarche\QrCode\Entity;
 use AcMarche\QrCode\Repository\QrCodeRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Endroid\QrCode\Label\LabelAlignment;
+use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
+use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 #[ORM\Table(name: 'qrcode')]
 #[ORM\Entity(repositoryClass: QrCodeRepository::class)]
-class QrCode
+class QrCode implements TimestampableInterface
 {
-    use UuidTrait;
+    use UuidTrait, TimestampableTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
