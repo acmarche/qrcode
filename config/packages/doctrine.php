@@ -1,18 +1,20 @@
 <?php
 
-
 use Symfony\Config\DoctrineConfig;
+
 use function Symfony\Component\DependencyInjection\Loader\Configurator\Env;
 
 return static function (DoctrineConfig $doctrine) {
-    $doctrine->dbal()
+    $doctrine
+        ->dbal()
         ->connection('qrcode')
         ->url(env('DATABASE_QRCODE_URL')->resolve())
         ->charset('utf8mb4');
 
-    $emMda = $doctrine->orm()->entityManager('qrcode');
-    $emMda->connection('qrcode');
-    $emMda->mapping('AcMarcheQrCode')
+    $emQrCode = $doctrine->orm()->entityManager('qrcode');
+    $emQrCode->connection('qrcode');
+    $emQrCode
+        ->mapping('AcMarcheQrCode')
         ->isBundle(false)
         ->type('attribute')
         ->dir('%kernel.project_dir%/src/AcMarche/QrCode/src/Entity')
