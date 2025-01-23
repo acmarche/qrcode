@@ -9,7 +9,7 @@ return static function (DoctrineConfig $doctrine) {
         ->dbal()
         ->connection('qrcode')
         ->url(env('DATABASE_QRCODE_URL')->resolve())
-        ->charset('utf8mb4');
+        ->charset('utf8mb4_unicode_ci');
 
     $emQrCode = $doctrine->orm()->entityManager('qrcode');
     $emQrCode->connection('qrcode');
