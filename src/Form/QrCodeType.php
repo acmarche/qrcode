@@ -31,15 +31,6 @@ class QrCodeType extends AbstractType
                 ],
             )
             ->add(
-                'dataFile',
-                FileType::class,
-                [
-                    'label' => 'Fichier',
-                    'help' => 'Charger votre fichier, un audio, un txt, une vidéo...',
-                    'required' => false,
-                ],
-            )
-            ->add(
                 'color',
                 ColorType::class,
                 [
