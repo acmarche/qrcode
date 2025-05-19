@@ -10,7 +10,7 @@
                     <tr>
                         <th>Id</th>
                         <th>Nom</th>
-                        <th>Url</th>
+                        <th>Type</th>
                         <th>Crée le</th>
                     </tr>
                     {% for qrcode in codes %}
@@ -21,14 +21,14 @@
                                 </a>
                             </td>
                             <td>{{ qrcode.name }}</td>
-                            <td>{{ qrcode.url }}</td>
+                            <td>{{ qrcode.type }}</td>
                             <td>{{ qrcode.createdAt|format_date('full') }}</td>
                         </tr>
                     {% endfor %}
                 </table>
             {% else %}
                 <p>Aucun qrcode généré</p>
-                <a href="{{ path('qrcode_new') }}" class="btn btn-primary">
+                <a href="{{ path('qrcode_select_type') }}" class="btn btn-primary">
                     Générer un QRCode
                 </a>
             {% endif %}

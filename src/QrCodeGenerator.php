@@ -13,6 +13,7 @@ use Endroid\QrCode\QrCode;
 use Endroid\QrCode\RoundBlockSizeMode;
 use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\Writer\Result\ResultInterface;
+use LaraZeus\QrCode\Generator;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -32,6 +33,10 @@ class QrCodeGenerator
      */
     public function generate(QrCodeEntity $qrCodeEntity): ResultInterface
     {
+        $qrGenerator = new Generator();
+        $qrGenerator->format('png');
+
+
         $builder = new Builder(
             writer: new PngWriter(),
             writerOptions: [],
@@ -55,20 +60,6 @@ class QrCodeGenerator
 
         return $builder->build();
     }
-
-    public function generateFromUrl(string $url): ResultInterface
-    {
-        $qrCode = new QrCode(
-            $url,
-            size: 1200,
-            margin: 10,
-        );
-        $name = basename($url);
-        $writer = new PngWriter();
-
-        return $writer->write($qrCode);
-    }
-
     public function saveToFile(ResultInterface $result, QrCodeEntity $qrCode): void
     {
         $name = $qrCode->uuid.'.png';
@@ -120,19 +111,6 @@ class QrCodeGenerator
         $b = hexdec(substr($hex, 4, 2));
 
         return new Color($r, $g, $b);
-    }
-
-    private function getData(QrCodeEntity $qrCodeEntity): string
-    {
-        if ($qrCodeEntity->url != '') {
-            return $qrCodeEntity->url;
-        }
-
-        if ($qrCodeEntity->dataFile instanceof UploadedFile) {
-            return $qrCodeEntity->dataFile->getContent();
-        }
-
-        return '';
     }
 
 

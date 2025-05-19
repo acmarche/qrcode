@@ -3,8 +3,7 @@
 namespace AcMarche\QrCode\Controller;
 
 use AcMarche\QrCode\Entity\QrCode;
-use AcMarche\QrCode\Form\QrCodeType;
-use AcMarche\QrCode\QrCodeGenerator;
+use AcMarche\QrCode\QrBuilder;
 use AcMarche\QrCode\Repository\QrCodeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,8 +17,9 @@ class DefaultController extends AbstractController
 {
     public function __construct(
         private readonly QrCodeRepository $qrCodeRepository,
-        private readonly QrCodeGenerator $qrCodeGenerator,
-    ) {}
+        private readonly QrBuilder $qrBuilder,
+    ) {
+    }
 
     #[Route(path: '/', name: 'qrcode_home')]
     public function index(): Response
@@ -35,8 +35,21 @@ class DefaultController extends AbstractController
         );
     }
 
-    #[Route(path: '/new/{uuid}', name: 'qrcode_new')]
-    public function new(Request $request, ?string $uuid = null): Response
+    #[Route(path: '/select/type', name: 'qrcode_select_type')]
+    public function select(): Response
+    {
+        $user = $this->getUser();
+
+        return $this->render(
+            '@AcMarcheQrCode/default/select_type.html.twig',
+            [
+                'uuid' => $user?->uuid,
+            ],
+        );
+    }
+
+    #[Route(path: '/new/{type}/{uuid}', name: 'qrcode_new')]
+    public function new(Request $request, string $type, ?string $uuid = null): Response
     {
         if ($uuid) {
             if (!$qrCode = $this->qrCodeRepository->findByUuid($uuid)) {
@@ -46,20 +59,28 @@ class DefaultController extends AbstractController
             $qrCode = new QrCode();
         }
 
-        $form = $this
-            ->createForm(QrCodeType::class, $qrCode);
+        $form = $this->qrBuilder->buildForm($type, $qrCode);
 
         $form->handleRequest($request);
+
+        //Generates a QrCode with an image centered in the middle.
+        //  QrCode::format('png')->merge('path-to-image.png')->generate();
+
+        //Generates a QrCode with an image centered in the middle.  The inserted image takes up 30% of the QrCode.
+        //    QrCode::format('png')->merge('path-to-image.png', .3)->generate();
+
+        //Generates a QrCode with an image centered in the middle.  The inserted image takes up 30% of the QrCode.
+        //   QrCode::format('png')->merge('http://www.google.com/someimage.png', .3, true)->generate();
 
         if ($form->isSubmitted() && $form->isValid()) {
             /* @var QrCode $data */
             $data = $form->getData();
             try {
-                $result = $this->qrCodeGenerator->generate($data);
+                $qrcode = $this->qrBuilder->generate($type, $qrCode);
+                $qrcode->size(500)->generate('Make a qrcode without Laravel!');
 
-                $this->qrCodeGenerator->saveToFile($result, $qrCode);
-
-                if ($data->persistInDatabase) {
+                dd($qrcode);
+                if ($data->name) {
                     $user = $this->getUser();
                     if ($user) {
                         $qrCode->username = $user->getUserIdentifier();
@@ -82,6 +103,7 @@ class DefaultController extends AbstractController
             '@AcMarcheQrCode/default/new.html.twig',
             [
                 'form' => $form,
+                'type' => $type,
                 'filePath' => $qrCode->filePath,
             ],
             $response,

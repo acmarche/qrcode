@@ -6,12 +6,12 @@ use AcMarche\QrCode\Entity\QrCode;
 use Endroid\QrCode\Label\LabelAlignment;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -21,13 +21,21 @@ class QrCodeType extends AbstractType
     {
         $builder
             ->add(
-                'url',
-                UrlType::class,
+                'size',
+                IntegerType::class,
                 [
                     'required' => false,
-                    'label' => 'Url web',
-                    'help' => 'Url du site web',
-                    'attr' => ['autocomplete' => 'off'],
+                    'label' => 'Taille',
+                    'help' => 'Taille en pixel (1200 par défaut)',
+                ],
+            )
+            ->add(
+                'format',
+                ChoiceType::class,
+                [
+                    'required' => true,
+                    'label' => 'Format',
+                    'choices' => ['SVG' => 'SVG', 'PNG' => 'PNG', 'EPS' => 'EPS'],
                 ],
             )
             ->add(
@@ -35,7 +43,7 @@ class QrCodeType extends AbstractType
                 ColorType::class,
                 [
                     'required' => false,
-                    'label' => 'Couleur des traits',
+                    'label' => 'Couleur',
                 ],
             )
             ->add(
@@ -47,12 +55,41 @@ class QrCodeType extends AbstractType
                 ],
             )
             ->add(
-                'size',
-                IntegerType::class,
+                'style',
+                ChoiceType::class,
                 [
-                    'required' => false,
-                    'label' => 'Taille',
-                    'help' => 'Taille en pixel (1200 par défaut)',
+                    'required' => true,
+                    'label' => 'Forme',
+                    'choices' => ['square' => 'square', 'dot' => 'dot', 'round' => 'round'],
+                ],
+            )
+            ->add(
+                'marge',
+                ChoiceType::class,
+                [
+                    'required' => true,
+                    'label' => 'Marge',
+                    'choices' => [
+                        '0' => '0',
+                        '1' => '1',
+                        '3' => '3',
+                        '7' => '7',
+                        '9' => '9',
+                    ],
+                ],
+            )
+            ->add(
+                'percentage',
+                ChoiceType::class,
+                [
+                    'required' => true,
+                    'label' => 'percentage',
+                    'choices' => [
+                        '.1' => 'S',
+                        '.2' => 'M',
+                        '.3' => 'L',
+                        '.4' => 'XL',
+                    ],
                 ],
             )
             ->add(
@@ -118,21 +155,12 @@ class QrCodeType extends AbstractType
                 ],
             )
             ->add(
-                'persistInDatabase',
-                CheckboxType::class,
-                [
-                    'required' => false,
-                    'label' => 'Sauvegarder',
-                    'help' => 'Sauvegarder en base de données pour consulter plus tard',
-                ],
-            )
-            ->add(
                 'name',
                 TextType::class,
                 [
                     'required' => false,
-                    'label' => 'Nom',
-                    'help' => 'Indiquez un nom pour votre archive',
+                    'label' => 'Conserver',
+                    'help' => 'Indiquez un nom pour archiver et récupérer le QrCode plus tard',
                     'attr' => ['autocomplete' => 'off'],
                 ],
             );
