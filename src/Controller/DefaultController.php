@@ -91,7 +91,7 @@ class DefaultController extends AbstractController
                         $this->qrCodeRepository->persist($qrCode);
                     }
 
-                    // $this->qrCodeRepository->flush();
+                    $this->qrCodeRepository->flush();
 
                     return $this->redirectToRoute('qrcode_new', ['uuid' => $qrCode->uuid]);
                 }
