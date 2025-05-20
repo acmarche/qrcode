@@ -3,12 +3,11 @@
 namespace AcMarche\QrCode\Form;
 
 use AcMarche\QrCode\Entity\QrCode;
-use Endroid\QrCode\Label\LabelAlignment;
+use AcMarche\QrCode\QrBuilder;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
-use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -21,7 +20,7 @@ class QrCodeType extends AbstractType
     {
         $builder
             ->add(
-                'size',
+                'pixels',
                 IntegerType::class,
                 [
                     'required' => false,
@@ -35,7 +34,7 @@ class QrCodeType extends AbstractType
                 [
                     'required' => true,
                     'label' => 'Format',
-                    'choices' => ['SVG' => 'SVG', 'PNG' => 'PNG', 'EPS' => 'EPS'],
+                    'choices' => QrBuilder::$FORMATS,
                 ],
             )
             ->add(
@@ -43,11 +42,11 @@ class QrCodeType extends AbstractType
                 ColorType::class,
                 [
                     'required' => false,
-                    'label' => 'Couleur',
+                    'label' => 'Couleur des traits',
                 ],
             )
             ->add(
-                'colorBackground',
+                'backgroundColor',
                 ColorType::class,
                 [
                     'required' => false,
@@ -60,72 +59,26 @@ class QrCodeType extends AbstractType
                 [
                     'required' => true,
                     'label' => 'Forme',
-                    'choices' => ['square' => 'square', 'dot' => 'dot', 'round' => 'round'],
+                    'choices' => QrBuilder::$FORMES,
                 ],
             )
             ->add(
-                'marge',
+                'margin',
                 ChoiceType::class,
                 [
                     'required' => true,
                     'label' => 'Marge',
-                    'choices' => [
-                        '0' => '0',
-                        '1' => '1',
-                        '3' => '3',
-                        '7' => '7',
-                        '9' => '9',
-                    ],
+                    'choices' => QrBuilder::$MARGINS,
                 ],
             )
             ->add(
-                'percentage',
+                'imagePercentage',
                 ChoiceType::class,
                 [
                     'required' => true,
-                    'label' => 'percentage',
-                    'choices' => [
-                        '.1' => 'S',
-                        '.2' => 'M',
-                        '.3' => 'L',
-                        '.4' => 'XL',
-                    ],
-                ],
-            )
-            ->add(
-                'labelText',
-                TextType::class,
-                [
-                    'required' => false,
-                    'label' => 'Label',
-                    'help' => 'Le label se mettra en dessous du qr code',
-                    'attr' => ['autocomplete' => 'off'],
-                ],
-            )
-            ->add(
-                'labelSize',
-                IntegerType::class,
-                [
-                    'required' => false,
-                    'label' => 'Taille',
-                    'help' => 'Taille en pixel (32 par défaut)',
-                ],
-            )
-            ->add(
-                'labelColor',
-                ColorType::class,
-                [
-                    'required' => false,
-                    'label' => 'Couleur du texte',
-                ],
-            )
-            ->add(
-                'labelAlignment',
-                EnumType::class,
-                [
-                    'class' => LabelAlignment::class,
-                    'required' => true,
-                    'label' => 'Alignement',
+                    'label' => 'Image pourcentage',
+                    'help' => 'Pourcentage de la taille du QrCode',
+                    'choices' => array_flip(QrBuilder::$IMAGE_PERCENTAGE),
                 ],
             )
             ->add(
@@ -138,19 +91,11 @@ class QrCodeType extends AbstractType
                 ],
             )
             ->add(
-                'logoSize',
-                IntegerType::class,
-                [
-                    'required' => false,
-                    'label' => 'Taille du logo',
-                    'help' => 'Taille en pixel (200 par défaut)',
-                ],
-            )
-            ->add(
                 'addDefaultLogo',
                 CheckboxType::class,
                 [
                     'label' => 'Ajouter le logo de la Ville',
+                    'help' => 'Le logo de la Ville sera placé au milieu du QrCode',
                     'required' => false,
                 ],
             )

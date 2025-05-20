@@ -17,7 +17,7 @@ class QrPhoneNumberType extends AbstractType
                 [
                     'required' => true,
                     'label' => 'Numéro de téléphone',
-                    'help' => 'Format:',
+                    'help' => 'Sans point, ni espace. Format:+32475662488',
                     'attr' => ['autocomplete' => 'off'],
                 ],
             );

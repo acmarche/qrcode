@@ -13,8 +13,10 @@
     {% include '@AcMarcheQrCode/form/_sms.html.twig' %}
 {% elseif type == 'wifi' %}
     {% include '@AcMarcheQrCode/form/_wifi.html.twig' %}
-{% else %}
+{% elseif type == 'url' %}
     {% include '@AcMarcheQrCode/form/_url.html.twig' %}
+{% else %}
+    {% include '@AcMarcheQrCode/form/_text.html.twig' %}
 {% endif %}
 
 {% include '@AcMarcheQrCode/form/_base.html.twig' %}

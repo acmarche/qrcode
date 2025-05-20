@@ -20,9 +20,6 @@ class QrCode implements TimestampableInterface
     #[ORM\Column]
     public ?int $id = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    public ?string $url = null;
-
     #[ORM\Column(length: 30, nullable: false)]
     public string $type = 'url';
 
@@ -30,10 +27,10 @@ class QrCode implements TimestampableInterface
     public string $color = '#000000';
 
     #[ORM\Column(length: 10, nullable: false)]
-    public string $colorBackground = '#FFFFFF';
+    public string $backgroundColor = '#FFFFFF';
 
     #[ORM\Column(type: 'smallint', nullable: false)]
-    public int $size = 1200;
+    public int $pixels = 1200;
 
     #[ORM\Column(length: 10, nullable: false)]
     public string $format = 'SVG';
@@ -41,8 +38,8 @@ class QrCode implements TimestampableInterface
     #[ORM\Column(length: 10, nullable: false)]
     public string $style = 'square';
 
-    #[ORM\Column(type: 'smallint', nullable: false)]
-    public $margin = 10;
+    #[ORM\Column(nullable: false)]
+    public int $margin = 10;
 
     #[ORM\Column(length: 150, nullable: true)]
     public ?string $labelText = null;
@@ -50,22 +47,24 @@ class QrCode implements TimestampableInterface
     #[ORM\Column(length: 10, nullable: true)]
     public string $labelColor = '#000000';
 
-    #[ORM\Column(type: 'smallint', nullable: true)]
+    #[ORM\Column(nullable: true)]
     public int $labelSize = 32;
 
     #[ORM\Column(length: 50, nullable: true, enumType: LabelAlignment::class)]
     public LabelAlignment $labelAlignment = LabelAlignment::Center;
 
+    /**
+     * Merge image
+     */
     public ?UploadedFile $logo = null;
+
+    #[ORM\Column(nullable: true)]
+    public float|string $imagePercentage = 0;
+
+    public bool $addDefaultLogo = false;
 
     #[ORM\Column(length: 150, nullable: true)]
     public ?string $logoPath = null;
-
-    #[ORM\Column(type: 'smallint', nullable: true)]
-    public int $logoSize = 200;
-
-    #[ORM\Column(length: 50, nullable: true)]
-    public bool $logoPunchoutBackground = false;
 
     #[ORM\Column(length: 50, nullable: false)]
     public ?string $username = null;
@@ -76,40 +75,68 @@ class QrCode implements TimestampableInterface
     #[ORM\Column(length: 150, nullable: true)]
     public ?string $filePath = null;
 
-    #[ORM\Column(length: 150, nullable: true)]
+    /**
+     * Simple text,Sms, phone number, email or Url
+     */
+    #[ORM\Column(length: 250, nullable: true)]
     public ?string $message = null;
-    #[ORM\Column(length: 150, nullable: true)]
-    public ?string $amount = null;
-    #[ORM\Column(length: 150, nullable: true)]
-    public ?string $email = null;
+
+    /**
+     * Sms, phone number, email
+     */
     #[ORM\Column(length: 150, nullable: true)]
     public ?string $phoneNumber = null;
     #[ORM\Column(length: 150, nullable: true)]
+    public ?string $email = null;
+    /**
+     * BTC
+     */
+    #[ORM\Column(length: 150, nullable: true)]
     public ?string $bankAccount = null;
     #[ORM\Column(length: 150, nullable: true)]
-    public ?string $for = null;
+    public ?string $amount = null;
+    #[ORM\Column(length: 150, nullable: true)]
+    public ?string $address = null;
     #[ORM\Column(length: 150, nullable: true)]
     public ?string $subject = null;
+    /**
+     * Geo
+     */
     #[ORM\Column(length: 150, nullable: true)]
     public ?string $latitude = null;
     #[ORM\Column(length: 150, nullable: true)]
     public ?string $longitude = null;
     #[ORM\Column(length: 150, nullable: true)]
+    /**
+     * Wifi
+     */
     public ?string $ssid = null;
     #[ORM\Column(length: 150, nullable: true)]
     public ?string $password = null;
     #[ORM\Column(length: 150, nullable: true)]
-    public ?string $encryption = null;
+    public ?string $encryption = 'WPA';
     #[ORM\Column(nullable: true)]
-    public bool|null $isHidden = false;
-
-    public string $percentage = '0';
-    public int $marge = 0;
-    public bool $addDefaultLogo = false;
+    public bool|null $hidden = false;
 
     public function __construct()
     {
         $this->uuid = $this->generateUuid();
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'email' => $this->email,
+            'phoneNumber' => $this->phoneNumber,
+            'message' => $this->message,
+            'subject' => $this->subject,
+            'ssid' => $this->ssid,
+            'encryption' => $this->encryption,
+            'hidden' => $this->hidden,
+            'latitude' => $this->latitude,
+            'longitude' => $this->longitude,
+            'bankAccount' => $this->bankAccount,
+        ];
     }
 
 }

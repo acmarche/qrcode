@@ -17,8 +17,7 @@ class QrEmailType extends AbstractType
                 EmailType::class,
                 [
                     'required' => true,
-                    'label' => 'Numéro de téléphone',
-                    'help' => 'Format:',
+                    'label' => 'Adresse mail',
                     'attr' => ['autocomplete' => 'off'],
                 ],
             )

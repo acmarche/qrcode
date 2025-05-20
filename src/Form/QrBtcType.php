@@ -33,7 +33,7 @@ class QrBtcType extends AbstractType
                 ],
             )
             ->add(
-                'for',
+                'address',
                 TextType::class,
                 [
                     'required' => false,

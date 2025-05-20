@@ -51,11 +51,11 @@ class DefaultController extends AbstractController
     #[Route(path: '/new/{type}/{uuid}', name: 'qrcode_new')]
     public function new(Request $request, string $type, ?string $uuid = null): Response
     {
+        $qrCode = null;
         if ($uuid) {
-            if (!$qrCode = $this->qrCodeRepository->findByUuid($uuid)) {
-                $qrCode = new QrCode();
-            }
-        } else {
+            $qrCode = $this->qrCodeRepository->findByUuid($uuid);
+        }
+        if (!$qrCode) {
             $qrCode = new QrCode();
         }
 
@@ -64,22 +64,24 @@ class DefaultController extends AbstractController
         $form->handleRequest($request);
 
         //Generates a QrCode with an image centered in the middle.
-        //  QrCode::format('png')->merge('path-to-image.png')->generate();
+        //QrCode::format('png')->merge('path-to-image.png')->generate();
 
         //Generates a QrCode with an image centered in the middle.  The inserted image takes up 30% of the QrCode.
-        //    QrCode::format('png')->merge('path-to-image.png', .3)->generate();
+        //QrCode::format('png')->merge('path-to-image.png', .3)->generate();
 
         //Generates a QrCode with an image centered in the middle.  The inserted image takes up 30% of the QrCode.
-        //   QrCode::format('png')->merge('http://www.google.com/someimage.png', .3, true)->generate();
-
+        //QrCode::format('png')->merge('http://www.google.com/someimage.png', .3, true)->generate();
+        $qrString = '';
         if ($form->isSubmitted() && $form->isValid()) {
             /* @var QrCode $data */
             $data = $form->getData();
-            try {
-                $qrcode = $this->qrBuilder->generate($type, $qrCode);
-                $qrcode->size(500)->generate('Make a qrcode without Laravel!');
 
-                dd($qrcode);
+            try {
+                $qr = $this->qrBuilder->generateDataType($type, $qrCode);
+                $qrString = (string)$qr;
+                $imageName = $this->qrBuilder->generate((string)$qr, $data->format);
+                $qrCode->filePath = $this->qrBuilder->imageWebPath($imageName);
+
                 if ($data->name) {
                     $user = $this->getUser();
                     if ($user) {
@@ -88,7 +90,8 @@ class DefaultController extends AbstractController
                     if (!$qrCode->id) {
                         $this->qrCodeRepository->persist($qrCode);
                     }
-                    $this->qrCodeRepository->flush();
+
+                    // $this->qrCodeRepository->flush();
 
                     return $this->redirectToRoute('qrcode_new', ['uuid' => $qrCode->uuid]);
                 }
@@ -104,13 +107,15 @@ class DefaultController extends AbstractController
             [
                 'form' => $form,
                 'type' => $type,
-                'filePath' => $qrCode->filePath,
+                'imagePath' => $qrCode->filePath,
+                'qrString' => $qrString,
             ],
             $response,
         );
     }
 
-    #[Route(path: '/show/{uuid}', name: 'qrcode_show')]
+    #[
+        Route(path: '/show/{uuid}', name: 'qrcode_show')]
     public function show(QrCode $qrCode): Response
     {
         return $this->render(
