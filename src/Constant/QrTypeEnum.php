@@ -7,7 +7,7 @@ enum QrTypeEnum: string
     case SMS = 'sms';
     case PHONE_NUMBER = 'phoneNumber';
     case EMAIL = 'email';
-    case BTC = 'btc';
+    case EPC = 'epc';
     case WIFI = 'wifi';
     case GEO = 'geo';
     case URL = 'url';
@@ -23,7 +23,7 @@ enum QrTypeEnum: string
             self::URL => 'Url',
             self::TEXT => 'Texte',
             self::GEO => 'Geo',
-            self::BTC => 'Virement bancaire',
+            self::EPC => 'Virement bancaire',
         };
     }
 }

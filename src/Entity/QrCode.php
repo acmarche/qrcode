@@ -88,17 +88,17 @@ class QrCode implements TimestampableInterface
     public ?string $phoneNumber = null;
     #[ORM\Column(length: 150, nullable: true)]
     public ?string $email = null;
+    #[ORM\Column(length: 150, nullable: true)]
+    public ?string $subject = null;
     /**
      * BTC
      */
     #[ORM\Column(length: 150, nullable: true)]
-    public ?string $bankAccount = null;
+    public ?string $iban = null;
     #[ORM\Column(length: 150, nullable: true)]
     public ?string $amount = null;
     #[ORM\Column(length: 150, nullable: true)]
-    public ?string $address = null;
-    #[ORM\Column(length: 150, nullable: true)]
-    public ?string $subject = null;
+    public ?string $recipient = null;
     /**
      * Geo
      */
@@ -122,21 +122,4 @@ class QrCode implements TimestampableInterface
     {
         $this->uuid = $this->generateUuid();
     }
-
-    public function toArray(): array
-    {
-        return [
-            'email' => $this->email,
-            'phoneNumber' => $this->phoneNumber,
-            'message' => $this->message,
-            'subject' => $this->subject,
-            'ssid' => $this->ssid,
-            'encryption' => $this->encryption,
-            'hidden' => $this->hidden,
-            'latitude' => $this->latitude,
-            'longitude' => $this->longitude,
-            'bankAccount' => $this->bankAccount,
-        ];
-    }
-
 }

@@ -6,44 +6,46 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Iban;
 
-class QrBtcType extends AbstractType
+class QrEpcType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add(
-                'bankAccount',
+                'iban',
                 TextType::class,
                 [
                     'required' => true,
-                    'label' => 'Numéro de téléphone',
-                    'help' => 'Format:',
+                    'label' => 'Numéro de compte bancaire',
+                    'help' => 'Sans espace, exemple:BE87105068822094',
                     'attr' => ['autocomplete' => 'off'],
+                    'constraints' => [new Iban()],
                 ],
             )
             ->add(
                 'amount',
                 MoneyType::class,
                 [
-                    'required' => false,
+                    'required' => true,
                     'label' => 'Montant',
-                    'help' => 'Non requis',
+                    'help' => 'Uniquement les chiffres, exemple: 100.50',
                     'attr' => ['autocomplete' => 'off'],
                 ],
             )
             ->add(
-                'address',
+                'recipient',
                 TextType::class,
                 [
-                    'required' => false,
+                    'required' => true,
                     'label' => 'A l\'attention de',
                     'help' => 'Destinataire',
                     'attr' => ['autocomplete' => 'off'],
                 ],
             )
             ->add(
-                'subject',
+                'message',
                 TextType::class,
                 [
                     'required' => false,

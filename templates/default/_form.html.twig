@@ -1,8 +1,8 @@
 {{ form_start(form) }}
 {{ form_errors(form) }}
 
-{% if type == 'btc' %}
-    {% include '@AcMarcheQrCode/form/_btc.html.twig' %}
+{% if type == 'epc' %}
+    {% include '@AcMarcheQrCode/form/_epc.html.twig' %}
 {% elseif type == 'email' %}
     {% include '@AcMarcheQrCode/form/_email.html.twig' %}
 {% elseif type == 'geo' %}

@@ -3,12 +3,13 @@
 namespace AcMarche\QrCode;
 
 use AcMarche\QrCode\Constant\QrTypeEnum;
+use AcMarche\QrCode\DataTypes\EPC;
 use AcMarche\QrCode\DataTypes\SMS;
 use AcMarche\QrCode\DataTypes\TEXT;
 use AcMarche\QrCode\Entity\QrCode;
-use AcMarche\QrCode\Form\QrBtcType;
 use AcMarche\QrCode\Form\QrCodeType;
 use AcMarche\QrCode\Form\QrEmailType;
+use AcMarche\QrCode\Form\QrEpcType;
 use AcMarche\QrCode\Form\QrGeoType;
 use AcMarche\QrCode\Form\QrMessageType;
 use AcMarche\QrCode\Form\QrPhoneNumberType;
@@ -16,7 +17,6 @@ use AcMarche\QrCode\Form\QrSmsType;
 use AcMarche\QrCode\Form\QrUrlType;
 use AcMarche\QrCode\Form\QrWifiType;
 use BaconQrCode\Encoder\Encoder;
-use LaraZeus\QrCode\DataTypes\BTC;
 use LaraZeus\QrCode\DataTypes\Email;
 use LaraZeus\QrCode\DataTypes\Geo;
 use LaraZeus\QrCode\DataTypes\PhoneNumber;
@@ -72,13 +72,13 @@ class QrBuilder
             QrTypeEnum::GEO->value => $this->formBuilder->create(QrGeoType::class, $qrCode),
             QrTypeEnum::WIFI->value => $this->formBuilder->create(QrWifiType::class, $qrCode),
             QrTypeEnum::EMAIL->value => $this->formBuilder->create(QrEmailType::class, $qrCode),
-            QrTypeEnum::BTC->value => $this->formBuilder->create(QrBtcType::class, $qrCode),
+            QrTypeEnum::EPC->value => $this->formBuilder->create(QrEpcType::class, $qrCode),
             QrTypeEnum::URL->value => $this->formBuilder->create(QrUrlType::class, $qrCode),
             default => $this->formBuilder->create(QrMessageType::class, $qrCode),
         };
     }
 
-    public function generateDataType(string $type, QrCode $data): Email|BTC|WiFi|SMS|Geo|PhoneNumber|TEXT
+    public function generateDataType(string $type, QrCode $data): Email|EPC|WiFi|SMS|Geo|PhoneNumber|TEXT
     {
         $qr = match ($type) {
             QrTypeEnum::SMS->value => function () use ($data) {
@@ -103,12 +103,13 @@ class QrBuilder
             QrTypeEnum::WIFI->value => function () use ($data) {
                 $qr = new WiFi();
                 $qr->create([
-                    [
-                        'encryption' => $data->encryption,
-                        'ssid' => $data->ssid,
-                        'password' => $data->password,
-                        'hiddent' => $data->hidden,
-                    ]]
+                        [
+                            'encryption' => $data->encryption,
+                            'ssid' => $data->ssid,
+                            'password' => $data->password,
+                            'hiddent' => $data->hidden,
+                        ],
+                    ]
                 );
 
                 return $qr;
@@ -119,9 +120,16 @@ class QrBuilder
 
                 return $qr;
             },
-            QrTypeEnum::BTC->value => function () use ($data) {
-                $qr = new BTC();
-                $qr->create([$data->address, $data->amount]);
+            QrTypeEnum::EPC->value => function () use ($data) {
+                $qr = new EPC();
+                $qr->create(
+                    [
+                        'recipient' => $data->recipient,
+                        'amount' => $data->amount,
+                        'iban' => $data->iban,
+                        'message' => $data->message,
+                    ]
+                );
 
                 return $qr;
             },
