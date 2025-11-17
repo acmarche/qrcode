@@ -12,7 +12,6 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/qrcode')]
-#[IsGranted('IS_AUTHENTICATED_FULLY')]
 class DefaultController extends AbstractController
 {
     public function __construct(
@@ -25,7 +24,11 @@ class DefaultController extends AbstractController
     public function index(): Response
     {
         $user = $this->getUser();
-        $codes = $this->qrCodeRepository->findByUser($user->getUserIdentifier());
+        if ($user) {
+            $codes = $this->qrCodeRepository->findByUser($user->getUserIdentifier());
+        } else {
+            $codes = [];
+        }
 
         return $this->render(
             '@AcMarcheQrCode/default/index.html.twig',
@@ -86,9 +89,10 @@ class DefaultController extends AbstractController
                     $user = $this->getUser();
                     if ($user) {
                         $qrCode->username = $user->getUserIdentifier();
-                    }
-                    if (!$qrCode->id) {
-                        $this->qrCodeRepository->persist($qrCode);
+
+                        if (!$qrCode->id) {
+                            $this->qrCodeRepository->persist($qrCode);
+                        }
                     }
 
                     $this->qrCodeRepository->flush();
@@ -114,8 +118,7 @@ class DefaultController extends AbstractController
         );
     }
 
-    #[
-        Route(path: '/show/{uuid}', name: 'qrcode_show')]
+    #[Route(path: '/show/{uuid}', name: 'qrcode_show')]
     public function show(QrCode $qrCode): Response
     {
         return $this->render(
