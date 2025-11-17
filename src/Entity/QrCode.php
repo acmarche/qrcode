@@ -50,8 +50,8 @@ class QrCode implements TimestampableInterface
     #[ORM\Column(nullable: true)]
     public int $labelSize = 32;
 
-    #[ORM\Column(length: 50, nullable: true, enumType: LabelAlignment::class)]
-    public LabelAlignment $labelAlignment = LabelAlignment::Center;
+    #[ORM\Column(length: 50, nullable: true)]
+    public string $labelAlignment = 'center';
 
     /**
      * Merge image

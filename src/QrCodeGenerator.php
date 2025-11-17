@@ -51,7 +51,7 @@ class QrCodeGenerator
             backgroundColor: $this->hexToRgb($qrCodeEntity->colorBackground, white: true),
             labelText: $qrCodeEntity->labelText ?? '',
             labelFont: new OpenSans($qrCodeEntity->labelSize),
-            labelAlignment: $qrCodeEntity->labelAlignment,
+            //labelAlignment: $qrCodeEntity->labelAlignment,
             labelTextColor: $this->hexToRgb($qrCodeEntity->labelColor, white: true),
             logoPath: $this->setLogo($qrCodeEntity),
             logoResizeToWidth: $qrCodeEntity->logoSize,
