@@ -9,7 +9,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/qrcode')]
 class DefaultController extends AbstractController
@@ -93,9 +92,8 @@ class DefaultController extends AbstractController
                         if (!$qrCode->id) {
                             $this->qrCodeRepository->persist($qrCode);
                         }
+                        $this->qrCodeRepository->flush();
                     }
-
-                    $this->qrCodeRepository->flush();
 
                     return $this->redirectToRoute('qrcode_new', ['uuid' => $qrCode->uuid]);
                 }
